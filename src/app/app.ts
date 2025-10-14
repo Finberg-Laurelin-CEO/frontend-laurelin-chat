@@ -1,9 +1,11 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { LaurelinChatStartup } from './components/laurelin-chat-startup/laurelin-chat-startup';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [LaurelinChatStartup, CommonModule],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
