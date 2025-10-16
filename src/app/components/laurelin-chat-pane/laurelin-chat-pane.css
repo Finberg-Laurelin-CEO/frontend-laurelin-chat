@@ -1,0 +1,15 @@
+.chat-pane-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 99%;
+    position: absolute;
+    overflow-y: scroll;
+    height: 99%;
+}
+
+.chat-pane-wrapper {
+    height: 100%;
+    flex-grow: 1;
+    padding: 0rem 2rem 0rem 2rem;
+}
