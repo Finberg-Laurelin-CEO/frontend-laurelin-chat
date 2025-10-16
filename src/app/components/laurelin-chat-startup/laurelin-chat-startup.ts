@@ -45,8 +45,10 @@ export class LaurelinChatStartup implements OnInit{
         },1000);
   }
 
+  /**
+   * Angular lifecycle hook. Called when the component is created.
+   */
   ngOnInit(): void {
-    
     // Choose a random startup message.
     let chosenMessage = this.startupMessages[ Math.floor( Math.random()*this.startupMessages.length ) ];
     this.outputText = chosenMessage;
