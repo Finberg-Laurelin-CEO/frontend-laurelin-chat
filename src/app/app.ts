@@ -6,10 +6,11 @@ import { LaurelinChatEntry } from './components/laurelin-chat-entry/laurelin-cha
 import { LaurelinChatPane } from './components/laurelin-chat-pane/laurelin-chat-pane';
 import { ChatSubmissionBox } from './components/chat-submission-box/chat-submission-box';
 import { LaurelinChatComponent } from './components/laurelin-chat-component/laurelin-chat-component';
+import { ChatSubmitButton } from './components/chat-submit-button/chat-submit-button';
 
 @Component({
   selector: 'app-root',
-  imports: [LaurelinChatComponent],
+  imports: [LaurelinChatComponent, ChatSubmissionBox, ChatSubmitButton],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
