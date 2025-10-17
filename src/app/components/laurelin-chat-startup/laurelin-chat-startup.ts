@@ -45,18 +45,18 @@ export class LaurelinChatStartup implements OnInit{
         },1000);
   }
 
+  triggerFadein(): void {
+    // Choose a random startup message.
+    let chosenMessage = this.startupMessages[ Math.floor( Math.random()*this.startupMessages.length ) ];
+    this.outputText = chosenMessage;
+    this.fadeIn = true;
+    this.expand = true;
+  }
+
   /**
    * Angular lifecycle hook. Called when the component is created.
    */
   ngOnInit(): void {
-    // Choose a random startup message.
-    let chosenMessage = this.startupMessages[ Math.floor( Math.random()*this.startupMessages.length ) ];
-    this.outputText = chosenMessage;
-    // Now let's trigger the fade in and scroll animation.
-    setTimeout( ()=> {
-      this.fadeIn = true;
-      this.expand = true;
-    },500);
   }
 
 }

@@ -1,1 +1,9 @@
-<p>laurelin-chat-component works!</p>
+<div id="chat-component-container">
+    <div id="startup-wrapper" *ngIf="renderStartupAnim">
+        <laurelin-chat-startup #startupAnimation></laurelin-chat-startup>
+    </div>
+    <div id="chat-wrapper" *ngIf="!renderStartupAnim">
+            <laurelin-chat-pane></laurelin-chat-pane>
+            <chat-submission-box></chat-submission-box>
+    </div>
+</div>

@@ -4,10 +4,12 @@ import { LaurelinChatStartup } from './components/laurelin-chat-startup/laurelin
 import { CommonModule } from '@angular/common';
 import { LaurelinChatEntry } from './components/laurelin-chat-entry/laurelin-chat-entry';
 import { LaurelinChatPane } from './components/laurelin-chat-pane/laurelin-chat-pane';
+import { ChatSubmissionBox } from './components/chat-submission-box/chat-submission-box';
+import { LaurelinChatComponent } from './components/laurelin-chat-component/laurelin-chat-component';
 
 @Component({
   selector: 'app-root',
-  imports: [LaurelinChatStartup, LaurelinChatEntry, LaurelinChatPane, CommonModule],
+  imports: [LaurelinChatComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
