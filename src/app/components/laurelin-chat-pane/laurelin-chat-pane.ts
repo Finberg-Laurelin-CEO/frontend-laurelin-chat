@@ -24,17 +24,13 @@ export class LaurelinChatPane implements OnInit{
   
   entries: ChatEntry[] = [];
 
-  constructor() {
-    for ( let i = 0; i < 30; ++i ) {
-      if ( i % 2 == 0 ) {
-        this.entries.push(new ChatEntry())
-      }
-      else {
-        this.entries.push(new ChatEntry(-1, false, 'default text'));
-      }
-    }
-  }
+  constructor() {}
   ngOnInit(): void {}
 
-  
+  addChatEntry(ts: number=-1, sent: boolean=true, msg: string='Default text.') {
+    if ( ts < 0 ) {
+      ts = +new Date(); // I hate this syntax as much as you do.
+    }
+    this.entries.push( new ChatEntry(ts, sent, msg) );
+  }
 }

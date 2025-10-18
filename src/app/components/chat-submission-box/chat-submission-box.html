@@ -1,5 +1,8 @@
 <div id="chat-submission-container">
     <div id="chat-submission-wrapper">
-        <textarea id="chat-submission-input" class="laurelin-text-input" type="textarea"></textarea>
+        <textarea id="chat-submission-input" [(ngModel)]="textareaContent" class="laurelin-text-input" type="textarea"></textarea>
+    </div>
+    <div id="submit-button-wrapper">
+        <chat-submit-button (onSubmit)="onSubmitClick($event)"></chat-submit-button>
     </div>
 </div>
