@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
   selector: 'laurelin-chat-component',
   templateUrl: './laurelin-chat-component.html',
   styleUrl: './laurelin-chat-component.css',
-  imports: [ChatSubmissionBox, LaurelinChatEntry, LaurelinChatPane, LaurelinChatStartup, CommonModule]
+  imports: [ChatSubmissionBox, LaurelinChatPane, LaurelinChatStartup, CommonModule]
 })
 
 export class LaurelinChatComponent implements AfterViewInit{
@@ -17,13 +17,21 @@ export class LaurelinChatComponent implements AfterViewInit{
   renderStartupAnim: boolean = true;
 
   @ViewChild('startupAnimation') startupAnim: LaurelinChatStartup = new LaurelinChatStartup();
+  @ViewChild('chatPane') chatPane: LaurelinChatPane = new LaurelinChatPane();
+  @ViewChild('submissionBox') submissionBox: ChatSubmissionBox = new ChatSubmissionBox();
 
   ngAfterViewInit(): void {
     setTimeout( ()=> {this.startupAnim.triggerFadein();}, 50);
     setTimeout( ()=> {
       this.startupAnim.triggerFadeout();
       setTimeout( () => {this.renderStartupAnim=false;}, 1000);
-    }, 4000);
+    }, 3500);
+  }
+
+  onChatSubmission(msg: string) {
+    this.chatPane.addChatEntry(-1, true, msg);
+
+    // Here's where we'd submit an api call.
   }
 
   
