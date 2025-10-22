@@ -5,9 +5,10 @@
         class="laurelin-text-input"
         type="textarea"
         placeholder="Start your conversation! Press ctrl-enter or click to submit."
-        (keydown.control.enter)="onSubmitClick(true)"></textarea>
+        [disabled]="disabled"
+        (keydown)="onKeyDown($event)"></textarea>
     </div>
     <div id="submit-button-wrapper">
-        <chat-submit-button (onSubmit)="onSubmitClick($event)"></chat-submit-button>
+        <chat-submit-button (onSubmit)="onSubmitClick($event)" [disabled]="disabled"></chat-submit-button>
     </div>
 </div>

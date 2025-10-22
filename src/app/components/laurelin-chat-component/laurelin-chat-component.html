@@ -2,9 +2,45 @@
     <div id="startup-wrapper" *ngIf="renderStartupAnim">
         <laurelin-chat-startup #startupAnimation></laurelin-chat-startup>
     </div>
-    <div id="chat-wrapper" *ngIf="!renderStartupAnim">
-    <!-- <div id="chat-wrapper"> -->
-            <laurelin-chat-pane #chatPane></laurelin-chat-pane>
-            <chat-submission-box #submissionBox (onSubmit)="onChatSubmission($event)"></chat-submission-box>
+    
+    <!-- Authentication Section -->
+    <div id="auth-wrapper" *ngIf="!renderStartupAnim && !isAuthenticated">
+        <div class="auth-container">
+            <h2>Welcome to Laurelin Chat</h2>
+            <p>Please sign in with Google to start chatting</p>
+            <button class="google-login-btn" (click)="loginWithGoogle()" [disabled]="isLoading">
+                <span *ngIf="!isLoading">Sign in with Google</span>
+                <span *ngIf="isLoading">Signing in...</span>
+            </button>
+            <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+        </div>
+    </div>
+    
+    <!-- Chat Section -->
+    <div id="chat-wrapper" *ngIf="!renderStartupAnim && isAuthenticated">
+        <div class="chat-header">
+            <h3>Laurelin Chat</h3>
+            <div class="user-info">
+                <span>{{ authService.getCurrentUser()?.name || authService.getCurrentUser()?.email }}</span>
+                <button class="logout-btn" (click)="logout()">Logout</button>
+            </div>
+        </div>
+        
+        <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+        
+        <div class="loading-indicator" *ngIf="isLoading">
+            <span>Processing...</span>
+        </div>
+        
+        <div class="chat-content">
+            <div class="chat-main">
+                <laurelin-chat-pane #chatPane></laurelin-chat-pane>
+                <chat-submission-box #submissionBox (onSubmit)="onChatSubmission($event)" [disabled]="isLoading"></chat-submission-box>
+            </div>
+            
+            <div class="chat-sidebar">
+                <ab-testing-panel></ab-testing-panel>
+            </div>
+        </div>
     </div>
 </div>

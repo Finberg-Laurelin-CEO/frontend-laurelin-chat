@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, Input } from '@angular/core';
 import { ChatSubmitButton } from '../chat-submit-button/chat-submit-button';
 import { FormsModule } from '@angular/forms';
 
@@ -12,10 +12,21 @@ export class ChatSubmissionBox {
 
   textareaContent: string = '';
 
+  @Input() disabled: boolean = false;
   @Output("onSubmit") onSubmit: EventEmitter<string> = new EventEmitter();
 
   onSubmitClick(evt: boolean): void {
-    this.onSubmit.emit(this.textareaContent);
+    if (!this.disabled && this.textareaContent.trim()) {
+      this.onSubmit.emit(this.textareaContent);
+      this.textareaContent = ''; // Clear the textarea after submission
+    }
+  }
+
+  onKeyDown(event: KeyboardEvent): void {
+    if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) {
+      event.preventDefault();
+      this.onSubmitClick(true);
+    }
   }
   
 }

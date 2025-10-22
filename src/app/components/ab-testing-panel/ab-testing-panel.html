@@ -1,0 +1,63 @@
+<div class="ab-testing-panel" *ngIf="currentExperiment">
+  <div class="panel-header">
+    <h4>A/B Testing</h4>
+    <span class="experiment-name">{{ currentExperiment.name }}</span>
+  </div>
+  
+  <div class="user-assignment" *ngIf="userVariant">
+    <div class="assignment-info">
+      <span class="variant-icon">{{ getVariantIcon(userVariant) }}</span>
+      <span class="variant-name" [style.color]="getVariantColor(userVariant)">
+        {{ userVariant.toUpperCase() }}
+      </span>
+      <span class="assignment-label">Model</span>
+    </div>
+  </div>
+
+  <div class="panel-actions">
+    <button 
+      class="btn btn-primary" 
+      (click)="loadExperimentResults()" 
+      [disabled]="isLoading">
+      <span *ngIf="!isLoading">View Results</span>
+      <span *ngIf="isLoading">Loading...</span>
+    </button>
+  </div>
+
+  <div class="experiment-results" *ngIf="experimentResults">
+    <h5>Experiment Results</h5>
+    <div class="results-grid">
+      <div class="result-item" *ngFor="let variant of Object.keys(experimentResults.variant_assignments)">
+        <div class="variant-header">
+          <span class="variant-icon">{{ getVariantIcon(variant) }}</span>
+          <span class="variant-name">{{ variant.toUpperCase() }}</span>
+        </div>
+        <div class="variant-stats">
+          <div class="stat">
+            <span class="stat-label">Users:</span>
+            <span class="stat-value">{{ experimentResults.variant_assignments[variant] }}</span>
+          </div>
+          <div class="stat" *ngIf="experimentResults.event_counts[variant]">
+            <span class="stat-label">Messages:</span>
+            <span class="stat-value">{{ experimentResults.event_counts[variant]['message_sent'] || 0 }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="total-stats">
+      <div class="stat">
+        <span class="stat-label">Total Users:</span>
+        <span class="stat-value">{{ experimentResults.total_users }}</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Total Events:</span>
+        <span class="stat-value">{{ experimentResults.total_events }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="error-message" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
+</div>
