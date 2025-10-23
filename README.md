@@ -180,6 +180,51 @@ Comprehensive error handling includes:
 - Safari 14+
 - Edge 90+
 
+## 📋 Issue Tracking with Beads
+
+This project uses [Beads](https://github.com/steveyegge/beads) - a dependency-aware issue tracker designed for AI-assisted development workflows.
+
+### Quick Setup
+
+```bash
+# Add Beads to your PATH
+export PATH="$PATH:/Users/Joe/go/bin"
+
+# Or use the setup script
+source ./setup-beads.sh
+```
+
+### Current Project Status
+
+- **Total Issues**: 8 (all open)
+- **Main Epic**: Angular Frontend - Laurelin Chat Application
+- **Ready Work**: 2 issues with no blockers
+
+### Key Features Being Tracked
+
+- Google OAuth authentication
+- Real-time chat interface
+- AI model integration
+- A/B testing panel
+- Session management
+- Responsive design & styling
+
+### Common Commands
+
+```bash
+bd list                    # View all issues
+bd ready                   # Show work ready to start (no blockers)
+bd create "New feature"    # Create new issue
+bd update issue-1 --status in_progress  # Update issue
+bd close issue-1 --reason "Completed"   # Close issue
+```
+
+### Documentation
+
+- **Full Guide**: See [BEADS_USAGE.md](./BEADS_USAGE.md) for comprehensive documentation
+- **Setup Script**: Run `./setup-beads.sh` for quick setup
+- **Git Integration**: Issues automatically sync with git via JSONL files
+
 ## Contributing
 
 1. Fork the repository
@@ -187,6 +232,8 @@ Comprehensive error handling includes:
 3. Make your changes
 4. Add tests if applicable
 5. Submit a pull request
+
+**Note**: This project uses Beads for issue tracking. Check `bd ready` to see available work and use `bd create` to track new features or bugs.
 
 ## Deployment
 
