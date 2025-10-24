@@ -21,8 +21,8 @@ FROM nginx:alpine
 # Copy custom nginx config
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# Copy built application from build stage (try both possible locations)
-COPY --from=build /app/dist/frontend-laurelin-chat /usr/share/nginx/html
+# Copy built application from build stage
+COPY --from=build /app/dist/frontend-laurelin-chat/browser /usr/share/nginx/html
 
 # Expose port 8080 (Cloud Run default)
 EXPOSE 8080
