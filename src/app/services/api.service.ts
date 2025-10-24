@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { environment, production } from '../config/environment';
 
 export interface User {
   user_id: string;
@@ -33,8 +34,10 @@ export interface ChatSession {
 
 export interface AuthResponse {
   success: boolean;
-  user: User;
-  token: string;
+  user?: User;
+  token?: string;
+  error?: string;
+  message?: string;
 }
 
 export interface ChatResponse {
@@ -54,15 +57,17 @@ export interface ApiResponse<T> {
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'http://localhost:8080/api'; // Change to your backend URL
+  private baseUrl = (typeof window !== 'undefined' && window.location.hostname !== 'localhost')
+    ? production.apiUrl
+    : environment.apiUrl;
   private authToken: string | null = null;
   private currentUser: User | null = null;
   
   // BehaviorSubjects for reactive state management
   private userSubject = new BehaviorSubject<User | null>(null);
   public user$ = this.userSubject.asObservable();
-  
-  private sessionSubject = new BehaviorSubject<ChatSession | null>(null);
+
+  public sessionSubject = new BehaviorSubject<ChatSession | null>(null);
   public currentSession$ = this.sessionSubject.asObservable();
 
   constructor(private http: HttpClient) {
@@ -99,11 +104,11 @@ export class ApiService {
       token: googleToken
     }).pipe(
       tap(response => {
-        if (response.success) {
+        if (response.success && response.token && response.user) {
           this.authToken = response.token;
           this.currentUser = response.user;
           this.userSubject.next(this.currentUser);
-          
+
           // Store in localStorage
           localStorage.setItem('auth_token', this.authToken);
           localStorage.setItem('current_user', JSON.stringify(this.currentUser));
@@ -111,7 +116,19 @@ export class ApiService {
       }),
       catchError(error => {
         console.error('Login error:', error);
-        return of({ success: false, user: null as any, token: '' });
+        // Handle greenlist rejection (403 error)
+        if (error.status === 403 && error.error) {
+          return of({
+            success: false,
+            error: error.error.error || 'not_authorized',
+            message: error.error.message || 'You are not authorized to access this application.'
+          });
+        }
+        return of({
+          success: false,
+          error: 'authentication_failed',
+          message: 'Authentication failed. Please try again.'
+        });
       })
     );
   }

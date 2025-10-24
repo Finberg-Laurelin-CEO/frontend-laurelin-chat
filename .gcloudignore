@@ -1,0 +1,11 @@
+.git
+.gitignore
+node_modules
+.angular
+dist
+.vscode
+.editorconfig
+*.md
+.beads
+.beads/bd.sock
+.beads/*.sock

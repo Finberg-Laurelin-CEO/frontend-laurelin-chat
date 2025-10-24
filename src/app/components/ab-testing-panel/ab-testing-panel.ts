@@ -10,13 +10,16 @@ import { Subscription } from 'rxjs';
   styleUrl: './ab-testing-panel.css'
 })
 export class AbTestingPanel implements OnInit, OnDestroy {
-  
+
   experiments: any[] = [];
   currentExperiment: any = null;
   userVariant: string = '';
   experimentResults: any = null;
   isLoading: boolean = false;
   errorMessage: string = '';
+
+  // Expose Object for template use
+  Object = Object;
 
   private subscriptions: Subscription = new Subscription();
 
@@ -58,8 +61,8 @@ export class AbTestingPanel implements OnInit, OnDestroy {
 
     try {
       const response = await this.apiService.assignToExperiment(this.currentExperiment.name).toPromise();
-      if (response && response.success) {
-        this.userVariant = response.variant;
+      if (response && response.success && response.data) {
+        this.userVariant = (response.data as any).variant;
         console.log(`User assigned to variant: ${this.userVariant}`);
       }
     } catch (error) {
@@ -93,8 +96,8 @@ export class AbTestingPanel implements OnInit, OnDestroy {
       this.errorMessage = '';
 
       const response = await this.apiService.getExperimentResults(this.currentExperiment.name).toPromise();
-      if (response && response.success) {
-        this.experimentResults = response.results;
+      if (response && response.success && response.data) {
+        this.experimentResults = (response.data as any).results;
       } else {
         this.errorMessage = 'Failed to load experiment results';
       }

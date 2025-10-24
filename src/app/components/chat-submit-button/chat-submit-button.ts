@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'chat-submit-button',
@@ -10,6 +10,8 @@ import { Component, EventEmitter, Output } from '@angular/core';
 export class ChatSubmitButton {
 
   mouseDown: boolean = false;
+
+  @Input() disabled: boolean = false;
 
   @Output("onSubmit") onSubmit: EventEmitter<boolean> = new EventEmitter();
 

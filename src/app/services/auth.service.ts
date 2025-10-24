@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ApiService, User } from './api.service';
+import { environment, production } from '../config/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -31,41 +32,55 @@ export class AuthService {
     }
   }
 
-  async loginWithGoogle(): Promise<boolean> {
+  async loginWithGoogle(): Promise<{ success: boolean; error?: string; message?: string }> {
     try {
       // Load Google Identity Services
       await this.loadGoogleIdentityServices();
-      
-      // Initialize Google Sign-In
-      const client = google.accounts.oauth2.initTokenClient({
-        client_id: 'YOUR_GOOGLE_CLIENT_ID', // Replace with your actual client ID
-        scope: 'email profile',
-        callback: async (response: any) => {
-          try {
-            const result = await this.apiService.loginWithGoogle(response.access_token).toPromise();
-            if (result && result.success) {
-              this.isAuthenticatedSubject.next(true);
-              return true;
-            }
-          } catch (error) {
-            console.error('Login error:', error);
-          }
-          return false;
-        }
-      });
 
-      // Request access token
-      client.requestAccessToken();
-      return true;
+      return new Promise((resolve) => {
+        // Initialize Google Sign-In
+        const googleClientId = (typeof window !== 'undefined' && window.location.hostname !== 'localhost')
+          ? production.googleClientId
+          : environment.googleClientId;
+        const client = (window as any).google.accounts.oauth2.initTokenClient({
+          client_id: googleClientId,
+          scope: 'email profile',
+          callback: async (response: any) => {
+            try {
+              const result = await this.apiService.loginWithGoogle(response.access_token).toPromise();
+              if (result && result.success) {
+                this.isAuthenticatedSubject.next(true);
+                resolve({ success: true });
+              } else if (result && result.error) {
+                // Handle greenlist rejection or other errors
+                resolve({
+                  success: false,
+                  error: result.error,
+                  message: result.message
+                });
+              } else {
+                resolve({ success: false, error: 'unknown_error', message: 'Login failed' });
+              }
+            } catch (error) {
+              console.error('Login error:', error);
+              resolve({ success: false, error: 'unknown_error', message: 'An unexpected error occurred' });
+            }
+          }
+        });
+
+        // Request access token
+        client.requestAccessToken();
+      });
     } catch (error) {
       console.error('Google login initialization error:', error);
-      return false;
+      return { success: false, error: 'initialization_failed', message: 'Failed to initialize Google Sign-In' };
     }
   }
 
   private loadGoogleIdentityServices(): Promise<void> {
     return new Promise((resolve, reject) => {
-      if (typeof google !== 'undefined' && google.accounts) {
+      const w = window as any;
+      if (typeof w.google !== 'undefined' && w.google.accounts) {
         resolve();
         return;
       }
@@ -73,7 +88,7 @@ export class AuthService {
       const script = document.createElement('script');
       script.src = 'https://accounts.google.com/gsi/client';
       script.onload = () => {
-        if (typeof google !== 'undefined' && google.accounts) {
+        if (typeof w.google !== 'undefined' && w.google.accounts) {
           resolve();
         } else {
           reject(new Error('Google Identity Services failed to load'));

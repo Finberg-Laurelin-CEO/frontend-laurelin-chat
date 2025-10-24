@@ -32,7 +32,7 @@ export class LaurelinChatComponent implements AfterViewInit, OnInit, OnDestroy {
 
   constructor(
     private apiService: ApiService,
-    private authService: AuthService
+    public authService: AuthService
   ) {}
 
   ngOnInit(): void {
